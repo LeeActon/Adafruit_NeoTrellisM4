@@ -11,11 +11,12 @@
 #error "This library is only for the Adafruit NeoTrellis M4!!"
 #endif
 
-
-
 class Adafruit_NeoTrellisM4 : public Adafruit_Keypad, public Adafruit_NeoPixel_ZeroDMA {
 
  public:
+  static const byte BUTTON_ROWS = 4; // four rows
+  static const byte BUTTON_COLUMNS = 8; // eight columns
+
   Adafruit_NeoTrellisM4();
   void begin(void);
   void tick(void);

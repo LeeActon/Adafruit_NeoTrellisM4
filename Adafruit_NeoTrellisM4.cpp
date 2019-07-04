@@ -3,26 +3,23 @@
 
 static const byte NEO_PIN = 10;
 
-static const byte ROWS = 4; // four rows
-static const byte COLS = 8; // eight columns
-
 //define the symbols on the buttons of the keypads
-static byte trellisKeys[ROWS][COLS] = {
+static byte trellisKeys[Adafruit_NeoTrellisM4::BUTTON_ROWS][Adafruit_NeoTrellisM4::BUTTON_COLUMNS] = {
   {0, 1,  2,  3,  4,  5,  6,  7},
   {8, 9,  10, 11, 12, 13, 14, 15},
   {16, 17, 18, 19, 20, 21, 22, 23},
   {24, 25, 26, 27, 28, 29, 30, 31}
 };
-static byte rowPins[ROWS] = {14, 15, 16, 17}; //connect to the row pinouts of the keypad
-static byte colPins[COLS] = {2, 3, 4, 5, 6, 7, 8, 9}; //connect to the column pinouts of the keypad
+static byte rowPins[Adafruit_NeoTrellisM4::BUTTON_ROWS] = {14, 15, 16, 17}; //connect to the row pinouts of the keypad
+static byte colPins[Adafruit_NeoTrellisM4::BUTTON_COLUMNS] = {2, 3, 4, 5, 6, 7, 8, 9}; //connect to the column pinouts of the keypad
 
 Adafruit_NeoTrellisM4::Adafruit_NeoTrellisM4(void) :
-  Adafruit_Keypad(makeKeymap(trellisKeys), rowPins, colPins, ROWS, COLS),
-  Adafruit_NeoPixel_ZeroDMA(ROWS*COLS, NEO_PIN, NEO_GRB)
+  Adafruit_Keypad(makeKeymap(trellisKeys), rowPins, colPins, BUTTON_ROWS, BUTTON_COLUMNS),
+  Adafruit_NeoPixel_ZeroDMA(BUTTON_ROWS*BUTTON_COLUMNS, NEO_PIN, NEO_GRB)
 {
-  _num_keys = ROWS * COLS;
-  _rows = ROWS;
-  _cols = COLS;
+  _num_keys = BUTTON_ROWS * BUTTON_COLUMNS;
+  _rows = BUTTON_ROWS;
+  _cols = BUTTON_COLUMNS;
   _midi_usb = false;
   _midi_channel_usb = 0;
   _midi_uart = false;
@@ -53,7 +50,7 @@ void Adafruit_NeoTrellisM4::autoUpdateNeoPixels(boolean flag) {
 }
 
 void Adafruit_NeoTrellisM4::fill(uint32_t color) {
-  for (int i=0; i<ROWS*COLS; i++) {
+  for (int i=0; i<BUTTON_ROWS*BUTTON_COLUMNS; i++) {
     Adafruit_NeoPixel_ZeroDMA::setPixelColor(i, color);
   }
   if (_auto_update) {
@@ -66,12 +63,12 @@ void Adafruit_NeoTrellisM4::tick(void)
   Adafruit_Keypad::tick();
   // look for an entire column being pressed at once and if it was, clear the whole buffer
   uint8_t rcount[] = {0, 0, 0, 0, 0, 0, 0, 0};
-  for(int i=0; i<(COLS*ROWS)-1; i++){
+  for(int i=0; i<(BUTTON_COLUMNS*BUTTON_ROWS)-1; i++){
     if (Adafruit_Keypad::justPressed(i+1, false))
-      rcount[i%COLS]++;
+      rcount[i%BUTTON_COLUMNS]++;
   }
-  for (int i=0; i<COLS; i++){
-    if (rcount[i] >= ROWS){
+  for (int i=0; i<BUTTON_COLUMNS; i++){
+    if (rcount[i] >= BUTTON_ROWS){
       Adafruit_Keypad::clear();
       break;
     }
